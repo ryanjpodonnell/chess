@@ -29,16 +29,18 @@ class Board
   end
 
   def in_check?(color)
-    check = []
-    king = nil
+    possible_moves = []
+    king_pos       = nil
     @grid.flatten.each do |square|
+      # We find the opponents king
       if square.class == King && square.color == color
-        king = square.pos
+        king_pos = square.pos
+      # We find every move of every piece of the player
       elsif !square.nil? && square.color != color
-        check << square.moves
+        possible_moves << square.moves
       end
     end
-    return true if check.flatten(1).include?(king)
+    return true if possible_moves.flatten(1).include?(king)
     false
   end
 

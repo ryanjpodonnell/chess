@@ -15,15 +15,18 @@ class Game
 
     until false
       @piece_to_move = nil
-      @tile_to = nil
-
-      system("clear")
-      self.display_board
-
-      move = STDIN.getch
-      toggle(move)
-      next if !@piece_to_move
-
+      @tile_to       = nil
+      
+      move = "~"
+      until move == "m"
+        system("clear")
+        self.display_board
+        move = STDIN.getch
+        toggle(move)
+      end
+      #@piece_to_move 
+      
+      
       while true
         system("clear")
         p @piece_to_move.moves
@@ -76,17 +79,11 @@ class Game
         @cursor[0] += 1 unless @cursor[0] == 7
       when "l"
         @cursor[1] += 1 unless @cursor[1] == 7
-      when "m"
-        @piece_to_move = self.board.grid[@cursor[0]][@cursor[1]]
-      when "h"
-        @tile_to = [@cursor[0], @cursor[1]] if @piece_to_move.moves.include?([@cursor[0], @cursor[1]])
       when "q"
         return false
     end
     true
   end
-
-
 end
 
 game = Game.new

@@ -13,9 +13,6 @@ class Piece
   end
 end
 
-class Dummy < Piece
-end
-
 class SlidingPiece < Piece
   VERTICAL   = [[-1, 0], [1, 0]]
   HORIZONTAL = [[0, -1] ,[0, 1]]
@@ -30,9 +27,9 @@ class SlidingPiece < Piece
         pot_pos = [pot_row, pot_col]
 
         if pot_row.between?(0, 7) && pot_col.between?(0,7)
-          break if @board[pot_pos] != nil && @board[pot_pos].color == self.color
+          break if !@board[pot_pos].nil? && @board[pot_pos].color == self.color
           possible_moves << [pot_row, pot_col]
-          break if @board[pot_pos] != nil && @board[pot_pos].color != self.color
+          break if !@board[pot_pos].nil? && @board[pot_pos].color != self.color
         end
       end
     end
@@ -67,7 +64,7 @@ class SteppingPiece < Piece
       pot_pos = [pot_row, pot_col]
       
       if pot_row.between?(0, 7) && pot_col.between?(0,7)
-        next if @board[pot_pos] != nil && @board[pot_pos].color == self.color
+        next if !@board[pot_pos].nil? && @board[pot_pos].color == self.color
         possible_moves << [pot_row, pot_col]
       end
     end
@@ -131,17 +128,21 @@ class Pawn < Piece
       
       if pot_row.between?(0, 7) && pot_col.between?(0,7)
         #if player can take opponents piece
-        if @board[pot_pos] != nil && pot_col != self.pos[1] && @board[pot_pos].color != self.color
+        if !@board[pot_pos].nil? && pot_col != self.pos[1] && @board[pot_pos].color != self.color
           possible_moves << pot_pos
         #if player wants to advance one square
-        elsif @board[pot_pos] == nil && pot_col == self.pos[1]
+        elsif @board[pot_pos].nil? && pot_col == self.pos[1]
           possible_moves << pot_pos
         end
         #if the pawn is still in the start position
         if self.pos == @start && pot_col == self.pos[1] && color == :white
-          possible_moves << [pot_row + 1, pot_col] if @board[[pot_row + 1, pot_col]] == nil
+          if @board[[pot_row + 1, pot_col]].nil?
+            possible_moves << [pot_row + 1, pot_col]
+          end
         elsif self.pos == @start && pot_col == self.pos[1] && color == :black
-          possible_moves << [pot_row - 1, pot_col] if @board[[pot_row - 1, pot_col]] == nil
+          if @board[[pot_row - 1, pot_col]].nil?
+            possible_moves << [pot_row - 1, pot_col]
+          end
         end
       end
     end
